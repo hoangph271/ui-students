@@ -3,66 +3,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles.css";
 
-const API_ROOT = "https://rest-students.herokuapp.com";
-// const API_ROOT = "http://localhost:8080";
-
-const _fetchApi = async ({ url, method = "GET", body, headers = {} }) => {
-  const res = await fetch(`${API_ROOT}${url}`, {
-    method,
-    ...(body && { body }),
-    ...(headers && { headers })
-  }).catch(e => {
-    toast(e.message);
-    throw e;
-  });
-
-  if (res.ok) {
-    return res.json();
-  }
-
-  throw new Error(await res.text());
-};
-
-const getApi = ({ url }) => _fetchApi({ url });
-const postApi = ({ url, body }) => {
-  return _fetchApi({
-    url,
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
-};
-
-const useStatus = () => {
-  const [error, setError] = useState(null);
-  const [results, setResults] = useState(null);
-
-  const Status = props => {
-    if (error) return props.error(error);
-
-    if (results) {
-      return results.length === 0 ? props.empty() : props.success(results);
-    }
-
-    return props.loading();
-  };
-
-  return { Status, setError, setResults };
-};
-
-const useInput = (init = "") => {
-  const [value, setValue] = useState(init);
-
-  const onChanged = e => {
-    e.preventDefault();
-
-    setValue(e.target.value);
-  };
-
-  return [value, onChanged];
-};
+import { getApi, postApi } from './lib/api'
+import { useInput, useStatus } from './lib/hooks'
 
 const StudentForm = ({ onStudentCreated }) => {
   const [name, onNameChanged] = useInput();
