@@ -48,4 +48,8 @@ const StudentForm = ({ className, onStudentCreated }) => {
 export default styled(StudentForm)`
   display: flex;
   flex-direction: column;
+
+  input:hover {
+    cursor: pointer;
+  }
 `

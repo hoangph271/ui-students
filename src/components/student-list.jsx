@@ -21,28 +21,30 @@ const StudentList = ({ className }) => {
   }, [setError, setResults])
 
   return (
-    <Status
-      loading={() => <div>{'...'}</div>}
-      empty={() => <div>{'Ø'}</div>}
-      error={error => <pre>{error.message}</pre>}
-      success={students => (
-        <ul>
-          {students.map(student => (
-            <li key={student._id}>
-              <span>{student.name}</span>
-              {' - '}
-              <span>{`a ${student.age} year${
-                student.age ? 's' : ''
-              } old`}</span>
-              {student.level && <span>{` ${student.level}`}</span>}
-            </li>
-          ))}
-        </ul>
-      )}
-    />
+    <div className={className}>
+      <Status
+        loading={() => <div>{'...'}</div>}
+        empty={() => <div>{'Ø'}</div>}
+        error={error => <pre>{error.message}</pre>}
+        success={students => (
+          <ul>
+            {students.map(student => (
+              <li key={student._id}>
+                <span>{student.name}</span>
+                {' - '}
+                <span>{`a ${student.age} year${
+                  student.age ? 's' : ''
+                } old`}</span>
+                {student.level && <span>{` ${student.level}`}</span>}
+              </li>
+            ))}
+          </ul>
+        )}
+      />
+    </div>
   )
 }
 
 export default styled(StudentList)`
-
+  
 `
