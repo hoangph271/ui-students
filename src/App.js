@@ -1,17 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { StudentForm, StudentList } from './components'
+import { Home } from './views'
 
 const App = ({ className }) => {
-  const [updatedAt, setUpdatedAt] = useState(Date.now())
-
   return (
-    <main className={className}>
-      <StudentForm onStudentCreated={() => setUpdatedAt(Date.now())} />
-      <StudentList key={updatedAt} />
+    <div className={className}>
+      <Home />
       <ToastContainer
         position="bottom-center"
         autoClose={2000}
@@ -23,7 +20,7 @@ const App = ({ className }) => {
         draggable
         pauseOnHover
       />
-    </main>
+    </div>
   )
 }
 
