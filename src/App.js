@@ -1,37 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "./styles.css";
+import React, { useState, useEffect } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import './styles.css'
 
 import { getApi, postApi } from './lib/api'
 import { useInput, useStatus } from './lib/hooks'
 
 const StudentForm = ({ onStudentCreated }) => {
-  const [name, onNameChanged] = useInput();
-  const [level, onLevelChanged] = useInput();
-  const [age, onAgeChanged] = useInput();
+  const [name, onNameChanged] = useInput()
+  const [level, onLevelChanged] = useInput()
+  const [age, onAgeChanged] = useInput()
 
   const handleCreateClicked = async e => {
-    e.preventDefault();
+    e.preventDefault()
 
     const res = await postApi({
-      url: "/student",
+      url: '/student',
       body: {
         name,
         level,
         age: age.length > 0 ? Number(age) : null
       }
-    });
+    })
 
     if (res.ok) {
-      onStudentCreated();
+      onStudentCreated()
     } else {
-      toast(await res.text());
+      toast(await res.text())
     }
-  };
+  }
 
   return (
-    <form style={{ display: "flex", flexDirection: "column" }}>
+    <form style={{ display: 'flex', flexDirection: 'column' }}>
       <input value={name} onChange={onNameChanged} placeholder="name" />
       <input
         value={age}
@@ -42,11 +42,11 @@ const StudentForm = ({ onStudentCreated }) => {
       <input value={level} onChange={onLevelChanged} placeholder="level" />
       <input type="submit" value="Create" onClick={handleCreateClicked} />
     </form>
-  );
-};
+  )
+}
 
 const App = () => {
-  const [updatedAt, setUpdatedAt] = useState(Date.now());
+  const [updatedAt, setUpdatedAt] = useState(Date.now())
 
   return (
     <main>
@@ -64,39 +64,39 @@ const App = () => {
         pauseOnHover
       />
     </main>
-  );
-};
+  )
+}
 
-export default App;
+export default App
 
 const StudentList = () => {
-  const { Status, setResults, setError } = useStatus();
+  const { Status, setResults, setError } = useStatus()
 
   useEffect(() => {
-    let isMounted = true;
+    let isMounted = true
 
-    getApi({ url: "/student" })
+    getApi({ url: '/student' })
       .then(students => isMounted && setResults(students))
-      .catch(error => isMounted && setError(error));
+      .catch(error => isMounted && setError(error))
 
     return () => {
-      isMounted = false;
-    };
-  }, [setError, setResults]);
+      isMounted = false
+    }
+  }, [setError, setResults])
 
   return (
     <Status
-      loading={() => <div>{"..."}</div>}
-      empty={() => <div>{"Ø"}</div>}
+      loading={() => <div>{'...'}</div>}
+      empty={() => <div>{'Ø'}</div>}
       error={error => <pre>{error.message}</pre>}
       success={students => (
         <ul>
           {students.map(student => (
             <li key={student._id}>
               <span>{student.name}</span>
-              {" - "}
+              {' - '}
               <span>{`a ${student.age} year${
-                student.age ? "s" : ""
+                student.age ? 's' : ''
               } old`}</span>
               {student.level && <span>{` ${student.level}`}</span>}
             </li>
@@ -104,5 +104,5 @@ const StudentList = () => {
         </ul>
       )}
     />
-  );
-};
+  )
+}

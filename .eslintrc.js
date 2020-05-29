@@ -15,12 +15,13 @@ module.exports = {
     ecmaFeatures: {
       jsx: true
     },
-    ecmaVersion: 11,
+    ecmaVersion: 10,
     sourceType: 'module'
   },
   plugins: [
     'react'
   ],
   rules: {
+    'react/prop-types': 'off',
   }
 }
