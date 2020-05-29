@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
+import styled from 'styled-components'
 import 'react-toastify/dist/ReactToastify.css'
-import './styles.css'
 
 import { getApi, postApi } from './lib/api'
 import { useInput, useStatus } from './lib/hooks'
@@ -45,11 +45,11 @@ const StudentForm = ({ onStudentCreated }) => {
   )
 }
 
-const App = () => {
+const App = ({ className }) => {
   const [updatedAt, setUpdatedAt] = useState(Date.now())
 
   return (
-    <main>
+    <main className={className}>
       <StudentForm onStudentCreated={() => setUpdatedAt(Date.now())} />
       <StudentList key={updatedAt} />
       <ToastContainer
@@ -67,7 +67,12 @@ const App = () => {
   )
 }
 
-export default App
+export default styled(App)`
+  .App {
+    font-family: sans-serif;
+    text-align: center;
+  }
+`
 
 const StudentList = () => {
   const { Status, setResults, setError } = useStatus()
