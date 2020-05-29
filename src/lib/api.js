@@ -9,15 +9,11 @@ const _fetchApi = async ({ url, method = 'GET', body, headers = {} }) => {
     ...(body && { body }),
     ...(headers && { headers })
   }).catch(e => {
-    toast(e.message)
+    toast.error(e.message)
     throw e
   })
 
-  if (res.ok) {
-    return res.json()
-  }
-
-  throw new Error(await res.text())
+  return res
 }
 
 export const getApi = ({ url }) => _fetchApi({ url })

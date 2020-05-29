@@ -26,5 +26,5 @@ export const useInput = (init = '') => {
     setValue(e.target.value)
   }
 
-  return [value, onChanged]
+  return [value, onChanged, setValue]
 }

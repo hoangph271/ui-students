@@ -7,9 +7,9 @@ import { postApi } from '../lib/api'
 import { useInput } from '../lib/hooks'
 
 const StudentForm = ({ className, onStudentCreated }) => {
-  const [name, onNameChanged] = useInput()
-  const [level, onLevelChanged] = useInput()
-  const [age, onAgeChanged] = useInput()
+  const [name, onNameChanged, setName] = useInput()
+  const [level, onLevelChanged, setLevel] = useInput()
+  const [age, onAgeChanged, setAge] = useInput()
 
   const handleCreateClicked = async e => {
     e.preventDefault()
@@ -25,8 +25,11 @@ const StudentForm = ({ className, onStudentCreated }) => {
 
     if (res.ok) {
       onStudentCreated()
+      setName('')
+      setLevel('')
+      setAge('')
     } else {
-      toast(await res.text())
+      toast.error(await res.text())
     }
   }
 
@@ -46,9 +49,24 @@ const StudentForm = ({ className, onStudentCreated }) => {
 }
 
 export default styled(StudentForm)`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-gap: 0.4rem;
 
+  input {
+    background: none;
+    outline: none;
+    border: none;
+    padding: 0.4rem 0.2rem;
+    box-shadow: 0 0 5px rgba(99, 110, 114, 1.0);
+    border-radius: 4px;
+  }
+  input[type="submit"] {
+    background-color: #00b894;
+    box-shadow: 0 0 5px rgba(99, 110, 114, 1.0);
+  }
+  input:focus, input[type="submit"]:hover {
+    box-shadow: 0 0 10px rgba(45, 52, 54, 1.0);
+  }
   input:hover {
     cursor: pointer;
   }
