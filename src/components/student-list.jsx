@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { getApi } from '../lib/api'
 import { useStatus } from '../lib/hooks'
 
-export const StudentList = styled(() => {
+const StudentList = ({ className }) => {
   const { Status, setResults, setError } = useStatus()
 
   useEffect(() => {
@@ -41,6 +41,8 @@ export const StudentList = styled(() => {
       )}
     />
   )
-})`
+}
+
+export default styled(StudentList)`
 
 `

@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { postApi } from '../lib/api'
 import { useInput } from '../lib/hooks'
 
-export const StudentForm = styled(({ onStudentCreated }) => {
+const StudentForm = ({ className, onStudentCreated }) => {
   const [name, onNameChanged] = useInput()
   const [level, onLevelChanged] = useInput()
   const [age, onAgeChanged] = useInput()
@@ -31,7 +31,7 @@ export const StudentForm = styled(({ onStudentCreated }) => {
   }
 
   return (
-    <form style={{ display: 'flex', flexDirection: 'column' }}>
+    <form className={className}>
       <input value={name} onChange={onNameChanged} placeholder="name" />
       <input
         value={age}
@@ -43,6 +43,9 @@ export const StudentForm = styled(({ onStudentCreated }) => {
       <input type="submit" value="Create" onClick={handleCreateClicked} />
     </form>
   )
-})`
+}
 
+export default styled(StudentForm)`
+  display: flex;
+  flex-direction: column;
 `
