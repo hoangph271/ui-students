@@ -42,6 +42,9 @@ export default styled(Home)`
 
   .student-list {
     grid-area: list;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   .student-form {
     grid-area: form;

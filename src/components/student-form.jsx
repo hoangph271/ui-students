@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import 'react-toastify/dist/ReactToastify.css'
@@ -10,9 +10,11 @@ const StudentForm = ({ className, onStudentCreated }) => {
   const [name, onNameChanged, setName] = useInput()
   const [level, onLevelChanged, setLevel] = useInput()
   const [age, onAgeChanged, setAge] = useInput()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleCreateClicked = async e => {
     e.preventDefault()
+    setIsLoading(true)
 
     const res = await postApi({
       url: '/student',
@@ -32,6 +34,8 @@ const StudentForm = ({ className, onStudentCreated }) => {
     } else {
       toast.error(await res.text())
     }
+
+    setIsLoading(false)
   }
 
   return (
@@ -44,7 +48,7 @@ const StudentForm = ({ className, onStudentCreated }) => {
         type="number"
       />
       <input value={level} onChange={onLevelChanged} placeholder="level" />
-      <input type="submit" value="Create" onClick={handleCreateClicked} />
+      <input type="submit" disabled={isLoading} value="Create" onClick={handleCreateClicked} />
     </form>
   )
 }
@@ -64,6 +68,9 @@ export default styled(StudentForm)`
   input[type="submit"] {
     background-color: #00b894;
     box-shadow: 0 0 5px rgba(99, 110, 114, 1.0);
+  }
+  input[type="submit"]:disabled {
+    background-color: #636e72;
   }
   input:focus, input[type="submit"]:hover {
     box-shadow: 0 0 10px rgba(45, 52, 54, 1.0);

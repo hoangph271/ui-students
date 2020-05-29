@@ -9,6 +9,7 @@ import { useStatus } from '../lib/hooks'
 const StudentList = ({ className, newStudentId }) => {
   const { Status, setResults, setError } = useStatus()
   const [loadingMore, setLoadingMore] = useState(null)
+  const [loadingIds, setLoadingIds] = useState([])
 
   useEffect(() => {
     if (!(newStudentId)) return
@@ -49,6 +50,10 @@ const StudentList = ({ className, newStudentId }) => {
   }, [setError, setResults])
 
   const handleDeleteStudent = async _id => {
+    if (loadingIds.includes(_id)) return
+
+    setLoadingIds(ids => [...ids, _id])
+
     const res = await deleteApi({ url: `/student/${_id}` })
 
     if (res.ok) {
@@ -56,6 +61,8 @@ const StudentList = ({ className, newStudentId }) => {
     } else {
       toast.error(await res.text())
     }
+
+    setLoadingIds(ids => ids.filter(id => id !== _id))
   }
 
   return (
@@ -78,7 +85,7 @@ const StudentList = ({ className, newStudentId }) => {
                     onClick={() => handleDeleteStudent(student._id)}
                     className="circle delete"
                   >
-                    {'✖'}
+                    {loadingIds.includes(student._id) ? '...' : '✖'}
                   </div>
                 </div>
               </li>
