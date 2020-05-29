@@ -24,7 +24,8 @@ const StudentForm = ({ className, onStudentCreated }) => {
     })
 
     if (res.ok) {
-      onStudentCreated()
+      const { _id } = await res.json()
+      onStudentCreated(_id)
       setName('')
       setLevel('')
       setAge('')

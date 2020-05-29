@@ -4,19 +4,19 @@ import styled from 'styled-components'
 import { StudentForm, StudentList } from '../components'
 
 const Home = ({ className }) => {
-  const [updatedAt, setUpdatedAt] = useState(Date.now())
+  const [newStudentId, setNewStudentId] = useState()
 
   return (
     <main className={className}>
       <StudentList
         className="student-list"
-        key={updatedAt}
+        newStudentId={newStudentId}
       />
       <div
         className="student-form"
       >
         <StudentForm
-          onStudentCreated={() => setUpdatedAt(Date.now())}
+          onStudentCreated={setNewStudentId}
         />
       </div>
     </main>

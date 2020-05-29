@@ -1,12 +1,32 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { getApi } from '../lib/api'
+import { getApi, deleteApi } from '../lib/api'
 import { useStatus } from '../lib/hooks'
 
-const StudentList = ({ className }) => {
+const StudentList = ({ className, newStudentId }) => {
   const { Status, setResults, setError } = useStatus()
+  const [loadingMore, setLoadingMore] = useState(null)
+
+  useEffect(() => {
+    if (!(newStudentId)) return
+
+    setLoadingMore(true)
+
+    getApi({ url: `/student/${newStudentId}` })
+      .then(async res => {
+        if (res.ok) {
+          const student = await res.json()
+          setResults(students => [...students, student])
+        } else {
+          toast.error(await res.text())
+        }
+
+        setLoadingMore(false)
+      })
+  }, [newStudentId])
 
   useEffect(() => {
     let isMounted = true
@@ -28,6 +48,16 @@ const StudentList = ({ className }) => {
     }
   }, [setError, setResults])
 
+  const handleDeleteStudent = async _id => {
+    const res = await deleteApi({ url: `/student/${_id}` })
+
+    if (res.ok) {
+      setResults(students => students.filter(student => student._id !== _id))
+    } else {
+      toast.error(await res.text())
+    }
+  }
+
   return (
     <div className={className}>
       <Status
@@ -38,13 +68,22 @@ const StudentList = ({ className }) => {
           <ul>
             {students.map(student => (
               <li key={student._id}>
-                <div className="age">{student.age}</div>
+                <div className="circle age">{student.age}</div>
                 <div className="detail">
                   <span className="name">{student.name}</span>
-                  <span>{student.level}</span>
+                  <span>{student.level || '?'}</span>
+                </div>
+                <div>
+                  <div
+                    onClick={() => handleDeleteStudent(student._id)}
+                    className="circle delete"
+                  >
+                    {'✖'}
+                  </div>
                 </div>
               </li>
             ))}
+            {loadingMore && <li>{'...'}</li>}
           </ul>
         )}
       />
@@ -74,8 +113,7 @@ export default styled(StudentList)`
     display: flex;
     align-items: center;
 
-    .age {
-      font-size: large;
+    .circle {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -84,6 +122,17 @@ export default styled(StudentList)`
       border-radius: 50%;
       box-shadow: inset 0 0 5px rgba(99, 110, 114, 1.0);
       background-image: linear-gradient(to top right, rgba(178, 190, 195, 0.6) 0%, rgba(178, 190, 195, 0.8) 35%, rgba(178, 190, 195, 0.6) 65%);
+    }
+
+    .age {
+      font-size: large;
+    }
+    .delete {
+      cursor: pointer;
+      background-image: linear-gradient(to top right, rgba(214, 48, 49, 0.8) 0%, rgba(214, 48, 49, 1.0) 35%, rgba(214, 48, 49, 0.8) 65%);
+    }
+    .delete:hover {
+      box-shadow: inset 0 0 15px rgba(45, 52, 54, 1.0);
     }
 
     .detail {
@@ -98,7 +147,6 @@ export default styled(StudentList)`
     }
 
     &:hover {
-      cursor: pointer;
       box-shadow: 0 0 10px rgba(45, 52, 54, 1.0);
     }
   }

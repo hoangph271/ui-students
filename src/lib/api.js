@@ -17,6 +17,7 @@ const _fetchApi = async ({ url, method = 'GET', body, headers = {} }) => {
 }
 
 export const getApi = ({ url }) => _fetchApi({ url })
+export const deleteApi = ({ url }) => _fetchApi({ url, method: 'DELETE' })
 export const postApi = ({ url, body }) => {
   return _fetchApi({
     url,
